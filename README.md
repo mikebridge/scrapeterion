@@ -27,3 +27,9 @@ Choose a random film from the list:
 ```bash
 ./random_film.py -f films.jl
 ```
+
+Go to a random criterion movie page in your default browser:
+
+```bash
+./random_film.py -f films.jl -b
+```

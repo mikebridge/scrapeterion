@@ -2,10 +2,12 @@
 
 import argparse
 import random
+import webbrowser
 
 import json_lines
 
 """
+Example output:
 {
    "title":"2 or 3 Things I Know About Her",
    "url":"https://www.criterionchannel.com/2-or-3-things-i-know-about-her",
@@ -15,7 +17,8 @@ import json_lines
 }
 """
 
-def main(filename):
+
+def main(filename) -> dict:
     count = 0
     selection = None
     with open(filename, 'rb') as f:
@@ -23,23 +26,28 @@ def main(filename):
             count += 1
             if random.randint(1, count) == count:
                 selection = item
-    print(f'Your selection is ')
-    print(f'   Title: {selection["title"]} ({selection["year"]})')
-    print(f'   Country: {selection["country"]}')
+    return selection
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Find a random film from Criterion Channel'
     )
     parser.add_argument('-f', '--file',
                         help='Path to .jl file',
                         required=True)
+    parser.add_argument('-b', '--browse',
+                        help='Open in a browser',
+                        dest='browse', action='store_true')
     args = parser.parse_args()
 
     if not args.file:
         parser.print_help()
         print("")
     else:
-        # print('File is {}'.format(args.file))
-        main(args.file)
+        film = main(args.file)
+        print(f'Your selection is ')
+        print(f'   Title: {film["title"]} ({film["year"]})')
+        print(f'   Country: {film["country"]}')
+        if args.browse:
+            webbrowser.open_new_tab(film['url'])
