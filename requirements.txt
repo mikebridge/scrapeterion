@@ -1,0 +1,2 @@
+json-lines==0.5.0
+Scrapy==2.4.1
