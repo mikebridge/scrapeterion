@@ -72,6 +72,17 @@ scrapy crawl films -O films.json
 scrapy crawl films -O films.xml
 ```
 
+## Genres
+
+There is a separate script to extract the 
+genre and director summaries.  At some point I'll
+merge this separate script into the main "films" 
+parser so that the resulting movies are categrorized. 
+
+```
+scrapy crawl genres -O genres.json
+```
+
 ## Tycherion
 
 This library is used to generate random
