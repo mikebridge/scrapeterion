@@ -2,8 +2,9 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from urllib.request import Request
 
-from scrapy import signals
+from scrapy import Item, signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -33,7 +34,15 @@ class ScrapeterionSpiderMiddleware:
         # it has processed the response.
 
         # Must return an iterable of Request, or item objects.
+        #spider.logger.info(f'*** Found {len(result)} results')
         for i in result:
+            if isinstance(i, (dict, Item)):
+                spider.logger.debug(f'{spider.name} found dict or item')
+                spider.logger.debug(i)
+            elif isinstance(i, Request):
+                spider.logger.debug(f'{spider.name} found request')
+            else:
+                spider.logger.debug("dunno what this is")
             yield i
 
     def process_spider_exception(self, response, exception, spider):
