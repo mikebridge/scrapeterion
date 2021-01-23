@@ -1,8 +1,8 @@
 import scrapy
 from urllib.parse import urlsplit, urlunsplit
 
-# work in progress
 
+# work in progress
 def remove_query_string(url: str) -> str:
     return urlunsplit(urlsplit(url)._replace(query="", fragment=""))
 
@@ -79,7 +79,6 @@ class FilmsByGenreSpider(scrapy.Spider):
     def get_slug(self, movie):
         url = self.get_url(movie)
         return find_slug(url)
-
 
     def select_text(self, movie, selector):
         return movie.css(selector).get().strip()

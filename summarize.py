@@ -14,9 +14,13 @@ def main(filename) -> dict:
     countries = {}
     years = {}
     with open(filename, 'rb') as f:
-        count = count + 1
         item: dict
-        for item in json_lines.reader(f):
+        #for item_raw in json_lines.reader(f):
+        for item in orjson.loads(f.read()):
+            # item = item_raw.rstrip(' ,')
+            # if len(item) < 2:
+            #     continue
+            count = count + 1
             extract_director(directors, item)
             extract_item(years, 'year', item)
             extract_item(countries, 'country', item)

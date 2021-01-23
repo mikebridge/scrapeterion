@@ -12,9 +12,11 @@ class GenresSpider(scrapy.Spider):
         director_keys = response.css("input[name=director]::attr(value)").getall()
         director_names = response.css("label[for^=filter-director]::text").getall()
 
-        genres = [{'key': key, 'name': name} for [key, name] in zip(genre_keys, genre_names)]
-        directors = [{'key': key, 'name': name} for [key, name] in zip(director_keys, director_names)]
-        yield {
-            'genres': genres,
-            'directors': directors
-        }
+        genres = [{'slug': key, 'name': name} for [key, name] in zip(genre_keys, genre_names)]
+        directors = [{'slug': key, 'name': name} for [key, name] in zip(director_keys, director_names)]
+        for genre in genres:
+            yield genre
+        #yield {
+        #    'genres': genres,
+        #    'directors': directors
+        #}
