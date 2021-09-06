@@ -15,7 +15,17 @@ def find_slug(url: str) -> str:
 class FilmsByGenreSpider(scrapy.Spider):
     name = 'films_by_genre'
     allowed_domains = ['films.criterionchannel.com']
-    start_urls = ['https://films.criterionchannel.com/']
+    # start_urls = ['https://films.criterionchannel.com/']
+    geo='US'
+
+    def __init__(self, geo='US', **kwargs):
+        if geo.upper() == 'CA':
+            self.geo='CA'
+            self.start_urls = [f'https://films.criterionchannel.com/?geo_availability=CA']
+        else:
+            self.geo='US'
+            self.start_urls = [f'https://films.criterionchannel.com/']
+        super().__init__(**kwargs)
 
     def parse(self, response, **kwargs):
         genre_keys = response.css("input[name=genre]::attr(value)").getall()
@@ -26,8 +36,11 @@ class FilmsByGenreSpider(scrapy.Spider):
 #        genres = [{'key': key, 'name': name} for [key, name] in zip(genre_keys, genre_names)]
 #        directors = [{'key': key, 'name': name} for [key, name] in zip(director_keys, director_names)]
         for genre in genre_keys:
-        # for genre in ['drama']:
-            genre_url = f'{response.request.url}?genre={genre}'
+            if '?' in response.request.url:
+                char = '&'
+            else:
+                char = '?'
+            genre_url = f'{response.request.url}{char}genre={genre}'
             yield scrapy.Request(url=genre_url, callback=self.parse_by_genre, meta={'genre': genre})
 
         # yield {
@@ -47,7 +60,8 @@ class FilmsByGenreSpider(scrapy.Spider):
                 'year': self.get_year(movie),
                 'director': self.get_director(movie),
                 'slug': self.get_slug(movie),
-                'genre': genre
+                'genre': genre,
+                'geo': self.geo or 'US'
             }
 
     def get_title(self, movie):
@@ -73,8 +87,9 @@ class FilmsByGenreSpider(scrapy.Spider):
             movie, selector='td.criterion-channel__td--year::text')
 
     def get_country(self, movie):
-        return movie.css(
-            '.criterion-channel__td--country span::text')[0].get()
+        country = movie.css(
+            '.criterion-channel__td--country span::text')
+        return country[0].get() if len(country) > 0 else 'Unknown'
 
     def get_slug(self, movie):
         url = self.get_url(movie)

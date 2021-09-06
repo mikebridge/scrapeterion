@@ -58,7 +58,7 @@ something like this:
 }
 ```
 
-You can also export as `json`, `csv`, or even `xml`
+You can also export as `json`, `csv`, `jl` or even `xml`
 by changing the file extension:
 
 ```bash
@@ -68,8 +68,18 @@ scrapy crawl films -O films.csv
 # JSON
 scrapy crawl films -O films.json
 
+# JL
+scrapy crawl films -O films.jl
+
 # XML
 scrapy crawl films -O films.xml
+```
+
+By default this will return films available in the US only.  If you want films available in Canada (only), you can
+add the two-letter ISO code `-a geo=CA`:
+
+```bash
+scrapy crawl films -a geo=CA -O films.json
 ```
 
 ## Genres
@@ -82,6 +92,13 @@ parser so that the resulting movies are categrorized.
 ```
 scrapy crawl genres -O genres.json
 ```
+
+## Films By Genre
+
+```
+scrapy crawl films_by_genre -O genres.json
+```
+ 
 
 ## Tycherion
 
