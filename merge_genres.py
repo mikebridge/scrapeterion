@@ -15,15 +15,21 @@ def main(filename) -> list:
             slug = movie['slug']
             existing_movie = movies.get(slug, None)
             if existing_movie:
-                if 'genre' in movie:
-                    existing_movie['genre'].append(movie['genre'])
+                merge_with_existing(existing_movie, movie, 'genre')
+                merge_with_existing(existing_movie, movie, 'geo')
             else:
                 if 'genre' in movie and movie['genre']:
                     movie['genre'] = [movie['genre']]
                 else:
                     movie['genre'] = []
+                movie['geo'] = [movie['geo']]
                 movies[movie['slug']] = movie
     return list(movies.values())
+
+
+def merge_with_existing(existing_movie, new_movie, key):
+    if key in new_movie and new_movie[key] not in existing_movie[key]:
+        existing_movie[key].append(new_movie[key])
 
 
 def as_json_lines(films: list) -> str:

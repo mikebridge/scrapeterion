@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = 'scrapeterion.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'scrapeterion 1.0 (+https://github.com/mikebridge/scrapeterion)'
+USER_AGENT = 'scrapeterion 1.2 (+https://github.com/mikebridge/scrapeterion)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
